@@ -8,8 +8,10 @@ Written in C++17 (for the filesystem library).
 Seems to work (tested only on my linux machine) with clang++ and g++ on the test.tex file provided.
 No other compilers were tested.
 
-I'm not sure how this works with other file encodings, as the complete contents
-of a file are read into a `std::string`.
+This probably only works with utf-8 encoded files or with files that only
+contain ascii characters. Differently encoded file contents may be corrupted
+during transformation (of course the files themselves are not modified, as
+output is only sent to std::cout).
 
 So please check the output before blindly removing your old file.
 
