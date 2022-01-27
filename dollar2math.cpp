@@ -63,8 +63,6 @@ int main(int argc, char **argv) {
 
   std::string filecontents;
   {
-    // std::basic_ifstream<char8_t> t(file);
-    // std::basic_stringstream<char8_t> buffer;
     std::ifstream t(file);
     std::stringstream buffer;
     buffer << t.rdbuf();
@@ -84,13 +82,11 @@ int main(int argc, char **argv) {
         return 1;
       }
 
-      // std::cout << filecontents << std::endl;
       *it = '\\';
       *(it + 1) = '[';
       *ending_it = '\\';
       *(ending_it + 1) = ']';
       it = ending_it + 1;
-      // std::cout << "After:\n" << filecontents << std::endl;
     }
   }
   {
@@ -106,9 +102,6 @@ int main(int argc, char **argv) {
         return 1;
       }
 
-      // std::cout << filecontents << std::endl;
-      // filecontents.insert(ending_it + 1, endmath.begin(), endmath.end());
-      // filecontents.erase(ending_it);
       *ending_it = '\\';
       auto ending_pos
           = static_cast<size_t>(std::distance(filecontents.begin(), ending_it));
