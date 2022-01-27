@@ -3,19 +3,15 @@ converts TeX style math ($math$ and $$aligned math$$) to amsmath style: \(math\)
 and \[aligned math\] takes exactly one filename as input and outputs the
 transformed file contents to std::out.
 
-Written in C++20.
+Written in C++17 (for the filesystem library).
 
-Seems to work only with clang and libc++, probably because the internal encoding
-of std::string in libc++ is different from that in libstdc++.
-Automatically chooses libc++, if clang is the compiler.
+Seems to work (tested only on my linux machine) with clang++ and g++ on the test.tex file provided.
+No other compilers were tested.
 
-Doesn't work with gnu.
+I'm not sure how this works with other file encodings, as the complete contents
+of a file are read into a `std::string`.
 
-Almost surely doesn't work with MSVC++ (not tested) or any other compiler (not
-tested).
-
-Definitely uses implementation-defined behavior, maybe uses undefined behavior,
-use at your own risk!
+So please check the output before blindly removing your old file.
 
 ## Usage
 Call like
@@ -31,3 +27,4 @@ On UNIX shells call like
 ```sh
 dollar2math oldstyle.tex > newstyle.tex
 ```
+to get a file with the amsmath style.
