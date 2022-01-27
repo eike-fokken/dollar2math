@@ -1,13 +1,16 @@
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <sstream>
 #include <string>
 
-static std::u8string::iterator find_next_real_doubledollar(
-    std::u8string::iterator it, std::u8string &filecontents) {
-  std::u8string::iterator ending_it = it;
+static std::string::iterator find_next_real_doubledollar(
+    std::string::iterator it, std::string &filecontents) {
+  std::string::iterator ending_it = it;
   while (ending_it != filecontents.end()) {
     ending_it = std::find(ending_it, filecontents.end(), '$');
 
@@ -30,8 +33,8 @@ static std::u8string::iterator find_next_real_doubledollar(
   return ending_it;
 }
 
-static std::u8string::iterator
-find_next_real_dollar(std::u8string::iterator it, std::u8string &filecontents) {
+static std::string::iterator
+find_next_real_dollar(std::string::iterator it, std::string &filecontents) {
   auto ending_it = it;
   while (ending_it != filecontents.end()) {
     ending_it = std::find(ending_it, filecontents.end(), '$');
@@ -58,10 +61,12 @@ int main(int argc, char **argv) {
 
   fs::path file = argv[1];
 
-  std::u8string filecontents;
+  std::string filecontents;
   {
-    std::basic_ifstream<char8_t> t(file);
-    std::basic_stringstream<char8_t> buffer;
+    // std::basic_ifstream<char8_t> t(file);
+    // std::basic_stringstream<char8_t> buffer;
+    std::ifstream t(file);
+    std::stringstream buffer;
     buffer << t.rdbuf();
     filecontents = buffer.str();
   }
@@ -105,16 +110,24 @@ int main(int argc, char **argv) {
       // filecontents.insert(ending_it + 1, endmath.begin(), endmath.end());
       // filecontents.erase(ending_it);
       *ending_it = '\\';
-      filecontents.insert(ending_it + 1, ')');
-      // std::cout << "First:\n" << filecontents << std::endl;
+      auto ending_pos
+          = static_cast<size_t>(std::distance(filecontents.begin(), ending_it));
       *it = '\\';
-      filecontents.insert(it + 1, '(');
-      // it = filecontents.begin() + ending_pos + 2;
-      it = ending_it + 1;
-      // std::cout << "After:\n" << filecontents << std::endl;
+      auto starting_pos
+          = static_cast<size_t>(std::distance(filecontents.begin(), it));
+      assert(*ending_it == filecontents[ending_pos]);
+      assert(*it == filecontents[starting_pos]);
+
+      filecontents.insert(ending_pos + 1, ")");
+      filecontents.insert(starting_pos + 1, "(");
+
+      it = filecontents.begin();
+      std::advance(it, ending_pos);
+      it = it + 3;
+      assert(*(it - 1) == *")");
+      assert(*(it - 2) == '\\');
     }
   }
 
-  std::basic_ofstream<char8_t> s("output.tex");
-  s << filecontents;
+  std::cout << filecontents << std::endl;
 }
