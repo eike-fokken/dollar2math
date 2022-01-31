@@ -21,7 +21,8 @@ Run
 ```sh
 cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 ```
-followd by 
+
+followed by 
 
 ```sh
 cmake --build build
