@@ -1,6 +1,6 @@
 ### dollar2math
-converts TeX style math ($math$ and $$aligned math$$) to amsmath style: \(math\)
-and \[aligned math\] takes exactly one filename as input and outputs the
+converts TeX style math ($math$ and $$aligned math$$) to amsmath style: \\(math\\)
+and \\[aligned math\\] takes exactly one filename as input and outputs the
 transformed file contents to std::out.
 
 Written in C++17 (for the filesystem library).
